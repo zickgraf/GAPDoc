@@ -387,7 +387,7 @@ fi;
 ##  <#/GAPDoc>
 
 InstallGlobalFunction(RunExamples, function(arg)
-  local exlists, opts, oldscr, l, sp, bad, s, test, pex, new, inp, ch, 
+  local exlists, opts, oldscr, l, sp, bad, s, full, pf, tests, test, pex, new, inp, ch, 
         fnams, str, fch, pos, pre, a, j, ex, i, attedStrin, f, nodiffs;
   exlists := arg[1];
   opts := rec(
@@ -446,6 +446,21 @@ InstallGlobalFunction(RunExamples, function(arg)
               Print("# But found:\n");
               PrintFormattedString(pex[4][i]);
               Print("########\n");
+              if StartsWith( pex[4][i], "Error") then
+                Print("Executing code again to get a break loop...\n");
+                s := InputTextString(ex[1]);
+                full := ReadAll(s);
+
+                pf := ParseTestInput(full, opts.ignoreComments);
+                tests := pf;
+                
+                inp := tests[1];
+                for i in [1..Length(inp)] do
+                  s := InputTextString(inp[i]);
+                  READ_STREAM_LOOP(s, true);
+                  CloseStream(s);
+                od;
+              fi;
             fi;
           fi;
         od;
