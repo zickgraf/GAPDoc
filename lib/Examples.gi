@@ -451,13 +451,13 @@ InstallGlobalFunction(RunExamples, function(arg)
                 s := InputTextString(ex[1]);
                 full := ReadAll(s);
 
-                pf := ParseTestInput(full, opts.ignoreComments);
+                pf := ParseTestInput(full, opts.ignoreComments, "line");
                 tests := pf;
                 
-                inp := tests[1];
+                inp := tests.inp;
                 for i in [1..Length(inp)] do
                   s := InputTextString(inp[i]);
-                  READ_STREAM_LOOP(s, true);
+                  READ_STREAM_LOOP(s, OutputTextUser( ));
                   CloseStream(s);
                 od;
               fi;
